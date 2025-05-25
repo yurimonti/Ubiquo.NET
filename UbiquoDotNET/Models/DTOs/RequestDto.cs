@@ -1,8 +1,9 @@
 using System.Text.Json.Nodes;
+using UbiquoDotNET.Abstractions.Fluent;
 
 namespace UbiquoDotNET.Models;
 
-public record RequestDto
+public record RequestDto : IRequest
 {
     //[JsonProperty("method")]
     public string Method { get; set; }
