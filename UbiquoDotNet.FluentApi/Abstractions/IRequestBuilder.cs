@@ -1,4 +1,4 @@
-﻿namespace UbiquoDotNet.Fluent.Abstractions
+﻿namespace UbiquoDotNet.FluentApi.Abstractions
 {
     public interface IRequestBuilder
     {

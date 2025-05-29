@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UbiquoDotNet.Fluent.Exceptions
+namespace UbiquoDotNet.FluentApi.Exceptions
 {
     internal class StubToAddNotValidException(string message) : Exception(message)
     {

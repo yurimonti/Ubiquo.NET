@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Json;
-using System.Text;
+﻿using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using System.Threading.Tasks;
-using UbiquoDotNet.Fluent.Abstractions;
-using UbiquoDotNet.Fluent.Exceptions;
+using UbiquoDotNet.FluentApi.Abstractions;
+using UbiquoDotNet.FluentApi.Exceptions;
 
-namespace UbiquoDotNet.Fluent
+namespace UbiquoDotNet.FluentApi
 {
     public class UbiquoMockBehavior :
         ISetMethodStage,
@@ -22,9 +17,9 @@ namespace UbiquoDotNet.Fluent
     {
         private IRequest _request;
         private IResponse _response;
-        public MockClient Client { get; set; }
-        public UbiquoServer UbiquoServer { get; set; }
-        public string Sut { get; set; }
+        public MockClient Client {private get; init; }
+        public UbiquoServer UbiquoServer {private get; init; }
+        public string Sut {private get; init; }
         private readonly string loadStubApi = "api/v2/admin/stubs/sut";
         private string LoadStubRequestUri() => $"{UbiquoServer.BaseUriSring()}/{loadStubApi}";
         public ISetMethodStage WhenARequest()
@@ -41,6 +36,8 @@ namespace UbiquoDotNet.Fluent
                 Response = _response,
                 Name = Client.ClientName.ToLower()
             };
+            _request = null;
+            _response = null;
             var stubToAdd = new AddStubDto(Sut, [stub]);
             using var client = new HttpClient();
             var postResponse = await client.PostAsJsonAsync(LoadStubRequestUri(), stubToAdd, JsonSerializerOptions.Web);
@@ -61,15 +58,15 @@ namespace UbiquoDotNet.Fluent
             return this;
         }
 
-        public ISetHeaderAndBodyToRequestStage WithBody<T>(T body)
+        //TODO: set JsonNode with WebOptions
+        public ISetHeaderAndBodyToRequestStage WithRequestBody(string serializedBody)
         {
-            string serialized = JsonSerializer.Serialize(body);
-            var node = JsonNode.Parse(serialized);
+            var node = JsonNode.Parse(serializedBody);
             _request.Body = node;
             return this;
         }
 
-        public ISetHeaderAndBodyToRequestStage WithHeaders(params IHeader[] headers)
+        public ISetHeaderAndBodyToRequestStage WithRequestHeaders(params IHeader[] headers)
         {
             IDictionary<string, IEnumerable<string>> requestHeaders = new Dictionary<string, IEnumerable<string>>();
             foreach (var header in headers)
@@ -98,15 +95,7 @@ namespace UbiquoDotNet.Fluent
             return this;
         }
 
-        ISetHeaderAndBodyToResponseStage ISetHeaderAndBodyToResponseStage.WithBody<T>(T body)
-        {
-            string serialized = JsonSerializer.Serialize(body);
-            var node = JsonNode.Parse(serialized);
-            _response.Body = node;
-            return this;
-        }
-
-        ISetHeaderAndBodyToResponseStage ISetHeaderAndBodyToResponseStage.WithHeaders(params IHeader[] headers)
+        public ISetHeaderAndBodyToResponseStage WithResponseHeaders(params IHeader[] headers)
         {
             IDictionary<string, IEnumerable<string>> responseHeader = new Dictionary<string, IEnumerable<string>>();
             foreach (var header in headers)
@@ -114,6 +103,13 @@ namespace UbiquoDotNet.Fluent
                 responseHeader.Add(new(header.HeaderAttribute, header.HeaderValues));
             }
             _response.Headers = responseHeader;
+            return this;
+        }
+
+        public ISetHeaderAndBodyToResponseStage WithResponseBody(string body)
+        {
+            var node = JsonNode.Parse(body);
+            _response.Body = node;
             return this;
         }
     }

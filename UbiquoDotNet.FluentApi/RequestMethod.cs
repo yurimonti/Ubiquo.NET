@@ -1,4 +1,4 @@
-﻿namespace UbiquoDotNet.Fluent;
+﻿namespace UbiquoDotNet.FluentApi;
 
 public enum RequestMethod
 {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UbiquoDotNet.Fluent.Abstractions
+namespace UbiquoDotNet.FluentApi.Abstractions
 {
     public interface IHeader
     {

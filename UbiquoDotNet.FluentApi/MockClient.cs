@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UbiquoDotNet.Fluent
+namespace UbiquoDotNet.FluentApi
 {
     public class MockClient
     {

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UbiquoDotNet.Fluent.Abstractions;
+using UbiquoDotNet.FluentApi.Abstractions;
 
-namespace UbiquoDotNet.Fluent
+namespace UbiquoDotNet.FluentApi
 {
     internal record StubDto
     {

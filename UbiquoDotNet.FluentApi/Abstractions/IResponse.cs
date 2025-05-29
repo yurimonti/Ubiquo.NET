@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Nodes;
 
-namespace UbiquoDotNet.Fluent.Abstractions
+namespace UbiquoDotNet.FluentApi.Abstractions
 {
     public interface IResponse
     {

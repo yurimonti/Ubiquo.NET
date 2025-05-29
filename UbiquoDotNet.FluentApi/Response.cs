@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Nodes;
-using UbiquoDotNet.Fluent.Abstractions;
+using UbiquoDotNet.FluentApi.Abstractions;
 
-namespace UbiquoDotNet.Fluent
+namespace UbiquoDotNet.FluentApi
 {
     internal class Response : IResponse
     {
