@@ -1,8 +1,9 @@
 using System.Text.Json.Nodes;
+using UbiquoDotNET.Abstractions.Fluent;
 
 namespace UbiquoDotNET.Models;
 
-public record ResponseDto
+public record ResponseDto : IResponse
 {
     //[JsonProperty("status")]
     public int Status { get; set; }
