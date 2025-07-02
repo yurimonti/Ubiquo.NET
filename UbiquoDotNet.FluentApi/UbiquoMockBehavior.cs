@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Json;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using UbiquoDotNet.FluentApi.Abstractions;
@@ -16,10 +17,12 @@ namespace UbiquoDotNet.FluentApi
         IBehaviorBuilder
     {
         private IRequest _request;
+
         private IResponse _response;
         public MockClient Client {private get; init; }
         public UbiquoServer UbiquoServer {private get; init; }
         public string Sut {private get; init; }
+
         private readonly string loadStubApi = "api/v2/admin/stubs/sut";
         private string LoadStubRequestUri() => $"{UbiquoServer.BaseUriSring()}/{loadStubApi}";
         public ISetMethodStage WhenARequest()
@@ -40,7 +43,12 @@ namespace UbiquoDotNet.FluentApi
             _response = null;
             var stubToAdd = new AddStubDto(Sut, [stub]);
             using var client = new HttpClient();
+            //TO add
             var postResponse = await client.PostAsJsonAsync(LoadStubRequestUri(), stubToAdd, JsonSerializerOptions.Web);
+            //TO delete
+            //string json = JsonSerializer.Serialize(stubToAdd, JsonSerializerOptions.Web);
+            //var requestContent = new StringContent(json, Encoding.UTF8, "application/json");
+            //var postResponse = await client.PostAsync(LoadStubRequestUri(), requestContent);
             //if(!res.IsSuccessStatusCode)
             //{
             //    var error = new {error = "stub not valid", stubToAdd };
@@ -64,6 +72,12 @@ namespace UbiquoDotNet.FluentApi
             var node = JsonNode.Parse(serializedBody);
             _request.Body = node;
             return this;
+        }
+
+        public ISetHeaderAndBodyToRequestStage WithRequestBody(object body)
+        {
+            string serializedBody = JsonSerializer.Serialize(body, JsonSerializerOptions.Web);
+            return WithRequestBody(serializedBody);
         }
 
         public ISetHeaderAndBodyToRequestStage WithRequestHeaders(params IHeader[] headers)
@@ -112,5 +126,13 @@ namespace UbiquoDotNet.FluentApi
             _response.Body = node;
             return this;
         }
+
+        public ISetHeaderAndBodyToResponseStage WithResponseBody(object body)
+        {
+            string serializedBody = JsonSerializer.Serialize(body, JsonSerializerOptions.Web);
+            return WithResponseBody(serializedBody);
+        }
+
+        
     }
 }
